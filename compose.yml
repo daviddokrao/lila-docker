@@ -188,6 +188,9 @@ services:
     restart: unless-stopped
     environment:
       - ENDPOINT=http://lila_fishnet:9665/fishnet
+      # lila-fishnet accepts any non-empty bearer token, but without a key the client
+      # sends a bare `Authorization: Bearer` header that fails to parse -> 400 Invalid request.
+      - KEY=lilafishnetdev
       - MAX_BACKOFF=5
       - STATS_FILE=/stats.json
     profiles:
@@ -198,6 +201,9 @@ services:
     restart: unless-stopped
     environment:
       - ENDPOINT=http://lila:9663/fishnet
+      # lila authenticates analysis clients against the `fishnet_client` collection and
+      # returns 404 for unknown keys. Matching document is created during setup.
+      - KEY=lilafishnetanalysis
       - MAX_BACKOFF=5
       - STATS_FILE=/stats.json
     profiles:
