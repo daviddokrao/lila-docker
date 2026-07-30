@@ -1,0 +1,25 @@
+services:
+  # Single self-contained image built by .github/workflows/publish-image.yml from
+  # our lila fork: lila + lila-ws + mongodb + redis + caddy under supervisord.
+  # Nothing is built on the VPS; the image is pulled from ghcr.
+  web:
+    image: ghcr.io/daviddokrao/lila-docker:lila-master
+    container_name: 9kings-web
+    restart: unless-stopped
+    environment:
+      - LILA_SITE_NAME=9Kings
+      - LILA_DOMAIN=9kings.vssa.com
+      - LILA_URL=https://9kings.vssa.com
+      # supervisord re-runs reset-db.sh on every start, so this controls the
+      # password of every seeded account. Left unset it falls back to the public
+      # default "password" and also mints lip_<username> API tokens.
+      - LILA_USER_PASSWORD=${LILA_USER_PASSWORD:?set it in deploy/.env on the VPS}
+      - JAVA_OPTS=-Xms2g -Xmx3g
+    expose:
+      - 8080
+    networks:
+      - edge
+
+networks:
+  edge:
+    external: true

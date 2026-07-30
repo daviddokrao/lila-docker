@@ -1,0 +1,7 @@
+{
+  "name": "9kings",
+  "routes": [
+    { "subdomain": "9kings", "service": "web", "port": 8080 }
+  ],
+  "needs_supabase": false
+}
