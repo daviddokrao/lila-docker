@@ -15,6 +15,19 @@ services:
       # default "password" and also mints lip_<username> API tokens.
       - LILA_USER_PASSWORD=${LILA_USER_PASSWORD:?set it in deploy/.env on the VPS}
       - JAVA_OPTS=-Xms2g -Xmx3g
+      # Mail thật. Không đặt MAILER_MOCK=false thì lila chỉ ghi log, không gửi.
+      # Giá trị nằm ở deploy/.env trên VPS, không commit.
+      #
+      # Mọi mặc định ở đây phải là giá trị DÙNG ĐƯỢC, không được để rỗng: với
+      # HOCON, một biến rỗng vẫn là "đã đặt" nên nó sẽ ghi đè giá trị của
+      # base.conf thành chuỗi rỗng thay vì giữ mặc định.
+      - MAILER_MOCK=${MAILER_MOCK:-true}
+      - MAILER_HOST=${MAILER_HOST:-localhost}
+      - MAILER_PORT=${MAILER_PORT:-587}
+      - MAILER_TLS=${MAILER_TLS:-true}
+      - MAILER_USER=${MAILER_USER:-unused}
+      - MAILER_PASSWORD=${MAILER_PASSWORD:-unused}
+      - MAILER_SENDER=${MAILER_SENDER:-9Kings <noreply@9kings.vssa.com>}
     expose:
       - 8080
     networks:
