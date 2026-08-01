@@ -74,6 +74,14 @@ jobs:
           repository: 'lichess-org/lila-db-seed'
           path: 'repos/lila-db-seed'
 
+      # Without this the image has no move provider, so playing the computer hangs on
+      # "waiting for opponent" forever and analysis never returns.
+      - name: Checkout lila-fishnet
+        uses: actions/checkout@v5
+        with:
+          repository: 'lichess-org/lila-fishnet'
+          path: 'repos/lila-fishnet'
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
         with:

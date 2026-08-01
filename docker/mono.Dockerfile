@@ -40,6 +40,13 @@ WORKDIR /lila-ws
 RUN sbt stage
 
 ##################################################################################
+FROM sbtscala/scala-sbt:eclipse-temurin-25.0.3_9_1.12.13_3.8.4 AS lilafishnetbuilder
+
+COPY repos/lila-fishnet /lila-fishnet
+WORKDIR /lila-fishnet
+RUN sbt app/stage
+
+##################################################################################
 FROM sbtscala/scala-sbt:eclipse-temurin-25.0.3_9_1.12.13_3.8.4 AS lilabuilder
 
 COPY --from=node /lila /lila
@@ -74,6 +81,11 @@ COPY --from=dbbuilder /lila-db-seed /lila-db-seed
 COPY --from=dbbuilder /scripts /scripts
 COPY --from=dbbuilder /seeded /seeded
 COPY --from=lilawsbuilder /lila-ws/target /lila-ws/target
+COPY --from=lilafishnetbuilder /lila-fishnet/app/target /lila-fishnet/app/target
+# The upstream fishnet binary is built against musl and ships its own Stockfish, so it
+# needs nothing here but its loader. Copying that is far smaller than a second runtime.
+COPY --from=niklasf/fishnet:2.12.0 /fishnet /usr/local/bin/fishnet
+COPY --from=niklasf/fishnet:2.12.0 /lib/ld-musl-x86_64.so.1 /lib/ld-musl-x86_64.so.1
 COPY --from=lilabuilder /lila/bin/mongodb/indexes.js /lila/bin/mongodb/indexes.js
 COPY --from=lilabuilder /lila/target /lila/target
 COPY --from=lilabuilder /lila/public /lila/public
