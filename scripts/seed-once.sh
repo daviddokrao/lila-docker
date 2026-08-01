@@ -8,6 +8,9 @@
 #
 # Đặt SEED_DB=force để cố ý dựng lại dữ liệu mẫu (dùng khi muốn dọn demo).
 
+# ĐỪNG đổi tên dấu này theo thương hiệu. Dấu nằm TRONG volume dữ liệu: đổi tên thì
+# lần deploy kế tiếp không thấy dấu cũ, script coi như kho còn trống và seed lại —
+# tức XOÁ SẠCH mọi tài khoản người thật. Đây là tên tệp nội bộ, không ai nhìn thấy.
 MARKER=/seeded/.9kings-seeded
 
 wait_for_mongo() {

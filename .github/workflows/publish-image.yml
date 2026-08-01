@@ -68,10 +68,14 @@ jobs:
           repository: 'lichess-org/lila-ws'
           path: 'repos/lila-ws'
 
+      # Fork CHỨ KHÔNG phải lichess-org: nội dung thật của các trang CMS (Giới thiệu,
+      # Điều khoản, Quyền riêng tư, biến thể cờ...) nằm ở data/cms trong fork này.
+      # Lấy bản upstream thì image vẫn dựng thành công, nhưng các trang đó hiện lại
+      # văn bản mẫu — hỏng im lặng, không có dấu hiệu nào lúc build.
       - name: Checkout lila-db-seed
         uses: actions/checkout@v5
         with:
-          repository: 'lichess-org/lila-db-seed'
+          repository: 'daviddokrao/lila-db-seed'
           path: 'repos/lila-db-seed'
 
       # Without this the image has no move provider, so playing the computer hangs on

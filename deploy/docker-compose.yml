@@ -4,12 +4,18 @@ services:
   # Nothing is built on the VPS; the image is pulled from ghcr.
   web:
     image: ghcr.io/daviddokrao/lila-docker:lila-master
+    # Tên container phải là <name>-web với name của deploy.json: Caddy trỏ thẳng vào
+    # 9kings-web:8080. Đây là tên hạ tầng, không phải tên thương hiệu — thương hiệu
+    # hiển thị là LILA_SITE_NAME ngay dưới.
     container_name: 9kings-web
     restart: unless-stopped
     environment:
-      - LILA_SITE_NAME=9Kings
-      - LILA_DOMAIN=9kings.vssa.com
-      - LILA_URL=https://9kings.vssa.com
+      - LILA_SITE_NAME=HungKings
+      # Địa chỉ hiện ra sau nút "Bấm để hiện email" ở trang Liên hệ. CHƯA KIỂM
+      # hòm thư này có người đọc hay không — đổi ở deploy/.env nếu cần.
+      - LILA_CONTACT_EMAIL=${LILA_CONTACT_EMAIL:-contact@hungkings.com}
+      - LILA_DOMAIN=hungkings-chess.vssa.com
+      - LILA_URL=https://hungkings-chess.vssa.com
       # supervisord re-runs reset-db.sh on every start, so this controls the
       # password of every seeded account. Left unset it falls back to the public
       # default "password" and also mints lip_<username> API tokens.
@@ -27,7 +33,7 @@ services:
       - MAILER_TLS=${MAILER_TLS:-true}
       - MAILER_USER=${MAILER_USER:-unused}
       - MAILER_PASSWORD=${MAILER_PASSWORD:-unused}
-      - MAILER_SENDER=${MAILER_SENDER:-9Kings <noreply@9kings.vssa.com>}
+      - MAILER_SENDER=${MAILER_SENDER:-HungKings <noreply@hungkings-chess.vssa.com>}
     expose:
       - 8080
     networks:

@@ -1,7 +1,8 @@
 {
+  "_comment": "name PHẢI giữ nguyên '9kings'. Nó quyết định ba thứ cùng lúc: thư mục /opt/apps/<name> mà deploy-remote.sh 'rm -rf' trước khi giải nén, tên project compose (tiền tố volume 9kings_mongodb — đổi là mất sạch tài khoản), và hostname Caddy trỏ tới (<name>-web:8080, phải khớp container_name). Ngoài ra /opt/apps/hungkings là MỘT ỨNG DỤNG KHÁC đang chạy (stack Supabase, hungkings.vssa.com) — đặt name='hungkings' sẽ xoá sạch nó. Tên thương hiệu hiển thị nằm ở LILA_SITE_NAME trong docker-compose.yml, không phải ở đây.",
   "name": "9kings",
   "routes": [
-    { "subdomain": "9kings", "service": "web", "port": 8080 }
+    { "subdomain": "hungkings-chess", "service": "web", "port": 8080 }
   ],
   "needs_supabase": false
 }
