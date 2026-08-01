@@ -32,7 +32,14 @@ services:
       - 8080
     networks:
       - edge
+    volumes:
+      # Kho dữ liệu MongoDB. Không có dòng này thì mọi tài khoản người thật
+      # đăng ký sẽ biến mất ở lần deploy kế tiếp, vì /seeded nằm trong image.
+      - mongodb:/seeded
 
 networks:
   edge:
     external: true
+
+volumes:
+  mongodb:

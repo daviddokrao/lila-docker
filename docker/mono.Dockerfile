@@ -26,6 +26,8 @@ ENV PATH="${JAVA_HOME}/bin:${PATH}"
 COPY repos/lila /lila
 COPY repos/lila-db-seed /lila-db-seed
 COPY scripts/reset-db.sh /scripts/reset-db.sh
+COPY scripts/seed-once.sh /scripts/seed-once.sh
+RUN chmod +x /scripts/reset-db.sh /scripts/seed-once.sh
 WORKDIR /lila-db-seed
 
 RUN mkdir /seeded \
