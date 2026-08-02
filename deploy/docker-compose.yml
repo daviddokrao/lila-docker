@@ -24,6 +24,8 @@ services:
       # đặt SEED_DB=force trong deploy/.env chẳng có tác dụng gì — compose giữ nó ở
       # phía ngoài, tiến trình không bao giờ thấy. Rỗng = giữ nguyên dữ liệu.
       - SEED_DB=${SEED_DB:-}
+      # Trang chủ v2 — mặc định DÙNG ĐƯỢC (không để rỗng: HOCON coi biến rỗng là "đã đặt")
+      - LILA_HOME_V2=${LILA_HOME_V2:-false}
       - JAVA_OPTS=-Xms2g -Xmx3g
       # Mail thật. Không đặt MAILER_MOCK=false thì lila chỉ ghi log, không gửi.
       # Giá trị nằm ở deploy/.env trên VPS, không commit.
