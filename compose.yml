@@ -59,6 +59,7 @@ services:
       - ENABLE_MONITORING=${ENABLE_MONITORING:-false}
       - ENABLE_RATE_LIMITING=${ENABLE_RATE_LIMITING:-true}
       - LILA_HOME_V2=${LILA_HOME_V2:-false}
+      - LILA_HOME_SIDEBAR=${LILA_HOME_SIDEBAR:-false}
     volumes:
       - ./repos/lila:/lila
       - ./repos/chessground:/chessground
