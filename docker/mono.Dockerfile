@@ -6,7 +6,9 @@ COPY conf/mono.conf /lila/conf/mono.conf
 ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
 ENV COREPACK_INTEGRITY_KEYS=0
 RUN corepack enable \
-    && /lila/ui/build --clean --debug
+# --prod chứ KHÔNG --debug: --debug nướng site.debug=true vào bundle, làm MỌI unhandled
+# rejection hiện dialog lỗi cho người dùng thật (David dính trên iOS 03/08).
+    && /lila/ui/build --clean --prod
 
 ##################################################################################
 FROM mongo:7-jammy AS dbbuilder
