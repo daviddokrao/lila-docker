@@ -32,6 +32,8 @@ services:
       # Trang chủ v2 — mặc định DÙNG ĐƯỢC (không để rỗng: HOCON coi biến rỗng là "đã đặt")
       - LILA_HOME_V2=${LILA_HOME_V2:-false}
       - LILA_HOME_SIDEBAR=${LILA_HOME_SIDEBAR:-false}
+      # Diễn đàn tạm tắt. Mặc định `true` = giữ hành vi upstream nếu .env không khai.
+      - LILA_FORUM=${LILA_FORUM:-true}
       - JAVA_OPTS=-Xms2g -Xmx3g
       # Mail thật. Không đặt MAILER_MOCK=false thì lila chỉ ghi log, không gửi.
       # Giá trị nằm ở deploy/.env trên VPS, không commit.
