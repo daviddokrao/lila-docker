@@ -14,8 +14,15 @@ services:
       # Địa chỉ hiện ra sau nút "Bấm để hiện email" ở trang Liên hệ. CHƯA KIỂM
       # hòm thư này có người đọc hay không — đổi ở deploy/.env nếu cần.
       - LILA_CONTACT_EMAIL=${LILA_CONTACT_EMAIL:-contact@hungkings.com}
-      - LILA_DOMAIN=hungkings-chess.vssa.com
-      - LILA_URL=https://hungkings-chess.vssa.com
+      # Domain chính thức từ 04/08: hungkings.com (dự án cũ chạy domain này đã huỷ, xem
+      # HANDOFF). Hai biến này chi phối MỌI URL tuyệt đối lila phát ra — CSP, wss://,
+      # hreflang, og:image, link trong thư — nên đổi ở đây là đủ, KHÔNG cần dựng lại image.
+      # Đổi giá trị thì phải deploy lại để compose recreate container (đổi env mà chỉ
+      # restart thì tiến trình vẫn giữ env cũ).
+      # LƯU Ý: chỉ khai MỘT domain ở đây, đó là domain chuẩn. hungkings-chess.vssa.com vẫn
+      # được Caddy nhận (xem deploy.json) nhưng mọi link trên trang sẽ trỏ về hungkings.com.
+      - LILA_DOMAIN=hungkings.com
+      - LILA_URL=https://hungkings.com
       # supervisord re-runs reset-db.sh on every start, so this controls the
       # password of every seeded account. Left unset it falls back to the public
       # default "password" and also mints lip_<username> API tokens.
