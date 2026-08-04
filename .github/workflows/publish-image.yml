@@ -6,7 +6,13 @@ on:
       repo:
         description: 'Lila repository to build'
         required: false
-        default: 'lichess-org/lila'
+        # PHẢI là fork, không phải lichess-org. Ảnh dựng ra mang tag `lila-<branch>`,
+        # tức `lila-master` — ĐÚNG cái tag bản demo đang chạy. Để mặc định upstream thì
+        # chỉ cần một lần bấm "Run workflow" mà không sửa ô này (hoặc một lần cron/push
+        # kích hoạt) là tag production bị ghi đè bằng bản Lichess trắng: mất sạch thương
+        # hiệu HungKings, mất nội dung CMS. Hỏng IM LẶNG — build vẫn xanh, chỉ vỡ ở lần
+        # `docker pull` + deploy kế tiếp.
+        default: 'daviddokrao/lila'
         type: string
       branch:
         description: 'Branch to build'
@@ -43,14 +49,15 @@ jobs:
       - name: Setup build variables
         id: build_vars
         run: |
-          echo "repo=${{ github.event.inputs.repo || 'lichess-org/lila' }}" >> $GITHUB_OUTPUT
+          # Fallback cũng phải là fork: cron và push KHÔNG có inputs nên luôn rơi vào đây.
+          echo "repo=${{ github.event.inputs.repo || 'daviddokrao/lila' }}" >> $GITHUB_OUTPUT
           echo "branch=${{ github.event.inputs.branch || 'master' }}" >> $GITHUB_OUTPUT
           if [ "${{ github.event.inputs.platforms || 'all' }}" = "all" ]; then
             echo "platforms=linux/amd64,linux/arm64" >> $GITHUB_OUTPUT
           else
             echo "platforms=${{ github.event.inputs.platforms }}" >> $GITHUB_OUTPUT
           fi
-          echo "is_lila_main=$([ "${{ github.event.inputs.repo || 'lichess-org/lila' }}" = "lichess-org/lila" ] && [ "${{ github.event.inputs.branch || 'master' }}" = "master" ] && echo "true" || echo "false")" >> $GITHUB_OUTPUT
+          echo "is_lila_main=$([ "${{ github.event.inputs.repo || 'daviddokrao/lila' }}" = "lichess-org/lila" ] && [ "${{ github.event.inputs.branch || 'master' }}" = "master" ] && echo "true" || echo "false")" >> $GITHUB_OUTPUT
 
       - name: Checkout repository
         uses: actions/checkout@v5

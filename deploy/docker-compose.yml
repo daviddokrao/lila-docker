@@ -20,6 +20,11 @@ services:
       # password of every seeded account. Left unset it falls back to the public
       # default "password" and also mints lip_<username> API tokens.
       - LILA_USER_PASSWORD=${LILA_USER_PASSWORD:?set it in deploy/.env on the VPS}
+      # Khoá AES bọc hash mật khẩu. `:?` để deploy CHẾT ngay nếu thiếu — mono.conf cũng
+      # không có fallback, nên không có đường nào chạy bằng khoá mặc định công khai của
+      # upstream nữa. Đổi khoá thì phải mã hoá lại cột bpass trong MongoDB cùng lượt
+      # (xem HANDOFF mục "Xoay bpass.secret"), nếu không mọi người mất mật khẩu.
+      - LILA_BPASS_SECRET=${LILA_BPASS_SECRET:?set it in deploy/.env on the VPS}
       # scripts/seed-once.sh đọc biến này BÊN TRONG container. Không khai ở đây thì
       # đặt SEED_DB=force trong deploy/.env chẳng có tác dụng gì — compose giữ nó ở
       # phía ngoài, tiến trình không bao giờ thấy. Rỗng = giữ nguyên dữ liệu.

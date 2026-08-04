@@ -1,4 +1,8 @@
 .env
+# Bản sao lưu .env vẫn chứa nguyên secret mà KHÔNG khớp luật `.env` ở trên —
+# `deploy/.env.bak` đã nằm chờ ở đây từ 01/08, chỉ cần một lệnh `git add -A` là lọt.
+*.env.bak
+*.env.backup
 .pnpm-store
 
 conf/firebase-service-account.json
