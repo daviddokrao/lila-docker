@@ -1,9 +1,13 @@
-# 9Kings — ghi chú dựng môi trường
+# HungKings — ghi chú dựng môi trường
 
 Fork của [lichess-org/lila-docker](https://github.com/lichess-org/lila-docker), dựng full stack Lichess
-làm nền cho 9Kings. Chưa sửa gì về sản phẩm — mọi thay đổi dưới đây chỉ để môi trường chạy được.
+làm nền cho HungKings. Chưa sửa gì về sản phẩm — mọi thay đổi dưới đây chỉ để môi trường chạy được.
 
 ## Repo layout
+
+> Thư mục trên đĩa vẫn tên `9Kings` và **các đường dẫn dưới đây là đường dẫn THẬT** — đừng
+> "sửa cho khớp thương hiệu", sửa là tài liệu sai. Cùng lý do với tên hạ tầng `9kings` trong
+> `deploy/deploy.json`: đó là định danh nội bộ, không phải tên thương hiệu.
 
 ```
 C:\PROJECTS\9Kings\lila-docker\      # orchestration (fork daviddokrao/lila-docker)
@@ -97,5 +101,5 @@ Hai fishnet client trong compose gốc không có API key:
 
 ## Giấy phép
 
-lila dùng **AGPL-3.0**: nếu 9Kings chạy public trên web thì phải công khai source của bản sửa đổi,
+lila dùng **AGPL-3.0**: nếu HungKings chạy public trên web thì phải công khai source của bản sửa đổi,
 kể cả không phân phối binary. Các fork hiện đang public nên đã đáp ứng.
