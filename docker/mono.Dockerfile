@@ -41,14 +41,20 @@ FROM sbtscala/scala-sbt:eclipse-temurin-25.0.3_9_1.12.13_3.8.4 AS lilawsbuilder
 
 COPY repos/lila-ws /lila-ws
 WORKDIR /lila-ws
-RUN sbt stage
+# Retry: `sbt stage` thỉnh thoảng exit 1 do coursier tải phụ thuộc lỗi tạm thời trên
+# runner CI (không tất định — cùng commit lúc pass lúc fail). Thử lại tối đa 3 lần trong
+# CÙNG layer để khỏi phải re-dispatch cả workflow. Chỉ fail build nếu cả 3 lần đều hỏng.
+RUN sbt stage || (sleep 5 && sbt stage) || (sleep 15 && sbt stage)
 
 ##################################################################################
 FROM sbtscala/scala-sbt:eclipse-temurin-25.0.3_9_1.12.13_3.8.4 AS lilafishnetbuilder
 
 COPY repos/lila-fishnet /lila-fishnet
 WORKDIR /lila-fishnet
-RUN sbt app/stage
+# Retry (xem ghi chú ở stage lila-ws): stage này đã fail 4 lần liên tiếp 05/08 do coursier
+# tải phụ thuộc lỗi tạm thời (exit 1 câm ngay sau warning, kèm ^[[0J), dù cùng commit đã
+# build thành công lúc 11:58. Thử lại tối đa 3 lần trong cùng layer.
+RUN sbt app/stage || (sleep 5 && sbt app/stage) || (sleep 15 && sbt app/stage)
 
 ##################################################################################
 FROM sbtscala/scala-sbt:eclipse-temurin-25.0.3_9_1.12.13_3.8.4 AS lilabuilder
@@ -56,7 +62,8 @@ FROM sbtscala/scala-sbt:eclipse-temurin-25.0.3_9_1.12.13_3.8.4 AS lilabuilder
 COPY --from=node /lila /lila
 WORKDIR /lila
 RUN TZ=UTC git log -1 --date=iso-strict-local --pretty='format:app.version.commit = "%H"%napp.version.date = "%ad"%napp.version.message = """%s"""%n' | tee conf/version.conf
-RUN ./lila.sh stage
+# Retry (xem ghi chú ở stage lila-ws): coursier tải phụ thuộc lỗi tạm thời trên CI.
+RUN ./lila.sh stage || (sleep 5 && ./lila.sh stage) || (sleep 15 && ./lila.sh stage)
 
 ##################################################################################
 FROM mongo:7-jammy
