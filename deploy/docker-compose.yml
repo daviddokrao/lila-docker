@@ -46,6 +46,9 @@ services:
       # Có service thật rồi thì đặt LILA_EXPLORER=true + 2 endpoint trong deploy/.env.
       - LILA_EXPLORER=${LILA_EXPLORER:-false}
       - LILA_LOCAL_DEV=${LILA_LOCAL_DEV:-false}
+      # Giải swiss chính thức: mặc định `true` = upstream nếu .env không khai. Demo đặt
+      # false trong deploy/.env vì đội "lichess-swiss" không tồn tại (giải 404 + lộ brand).
+      - LILA_SWISS_OFFICIAL=${LILA_SWISS_OFFICIAL:-true}
       - JAVA_OPTS=-Xms2g -Xmx3g
       # Mail thật. Không đặt MAILER_MOCK=false thì lila chỉ ghi log, không gửi.
       # Giá trị nằm ở deploy/.env trên VPS, không commit.
