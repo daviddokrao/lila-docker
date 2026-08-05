@@ -49,6 +49,14 @@ services:
       # Giải swiss chính thức: mặc định `true` = upstream nếu .env không khai. Demo đặt
       # false trong deploy/.env vì đội "lichess-swiss" không tồn tại (giải 404 + lộ brand).
       - LILA_SWISS_OFFICIAL=${LILA_SWISS_OFFICIAL:-true}
+      # SEO — cho Google index (David chốt 05/08, hungkings.com nay là production thật).
+      # net.crawlable=true gỡ cả robots.txt "Disallow: /" (Main.scala) lẫn <meta noindex>
+      # (page.scala). robots.txt vốn còn đòi Prod-mode nhưng image mono chạy Dev-mode CỐ Ý
+      # → đã sửa Main.scala bỏ ràng buộc isProd (chỉ còn crawlable + domain khớp). Mặc định
+      # true vì đây là compose production. Cảnh báo HOCON: biến rỗng vẫn "đã đặt" → true/false.
+      # LƯU Ý: www.hungkings.com trả 200 (không redirect), req.domain lệch net.domain nên
+      # /robots.txt của www VẪN Disallow — ổn nếu canonical trỏ apex; theo dõi thêm.
+      - LILA_CRAWLABLE=${LILA_CRAWLABLE:-true}
       - JAVA_OPTS=-Xms2g -Xmx3g
       # Mail thật. Không đặt MAILER_MOCK=false thì lila chỉ ghi log, không gửi.
       # Giá trị nằm ở deploy/.env trên VPS, không commit.
