@@ -1,11 +1,10 @@
 {
-  "_comment": "name PHẢI giữ nguyên '9kings' — đây là tên HẠ TẦNG, người dùng không bao giờ thấy nó. Nó quyết định ba thứ cùng lúc: thư mục /opt/apps/<name> mà deploy-remote.sh 'rm -rf' trước khi giải nén, tên project compose (tiền tố volume 9kings_mongodb — đổi là compose tạo volume RỖNG mới, tức mất sạch tài khoản thật), và hostname Caddy trỏ tới (<name>-web:8080, phải khớp container_name). Ghi chú cũ ở đây nói '/opt/apps/hungkings là ứng dụng khác đang chạy' nay đã HẾT HIỆU LỰC: dự án đó bị huỷ, thư mục không còn trên VPS (đã kiểm 04/08). Nhưng lý do VOLUME thì vẫn nguyên giá trị, nên vẫn không đổi name. Tên thương hiệu hiển thị nằm ở LILA_SITE_NAME, domain nằm ở LILA_DOMAIN/LILA_URL trong docker-compose.yml.",
+  "_comment": "name PHẢI giữ nguyên '9kings' — đây là tên HẠ TẦNG, người dùng không bao giờ thấy nó. Nó quyết định ba thứ cùng lúc: thư mục /opt/apps/<name> mà deploy-remote.sh 'rm -rf' trước khi giải nén, tên project compose (tiền tố volume 9kings_mongodb — đổi là compose tạo volume RỖNG mới, tức mất sạch tài khoản thật), và hostname Caddy trỏ tới (<name>-web:8080, phải khớp container_name). David chốt 05/08 GIỮ tên hạ tầng này khi dời brand+domain sang HungKings, chính vì rủi ro volume. Tên thương hiệu hiển thị nằm ở LILA_SITE_NAME, domain nằm ở LILA_DOMAIN/LILA_URL trong docker-compose.yml.",
+  "_routes_comment": "Domain chuẩn là hungkings.com (+ www). Route hungkings-chess.vssa.com ĐÃ BỎ 05/08 theo yêu cầu dời hết khỏi vssa (David chốt). Bộ sinh Caddy của platform CHỈ biết reverse_proxy, KHÔNG có redirect, nên sau khi bỏ route này thì link .vssa.com cũ sẽ CHẾT (connection error), không tự chuyển hướng — chấp nhận theo yêu cầu. LILA_URL của coach đã trỏ hungkings.com nên không còn phụ thuộc vssa. TUYỆT ĐỐI KHÔNG khai docs.hungkings.com — đó là app KHÁC (hungkings-docsite) đang chạy, khai ở đây là cướp route của nó.",
   "name": "9kings",
-  "_routes_comment": "Domain chuẩn từ 04/08 là hungkings.com (+ www). Giữ thêm hungkings-chess.vssa.com để không gãy giữa chừng — link cũ, phiên đang đăng nhập, và LILA_URL của coach đều còn trỏ vào đó. Bộ sinh Caddy của platform CHỈ biết reverse_proxy, KHÔNG có redirect, nên cách duy nhất giữ domain cũ sống là khai thêm host ở đây; mọi liên kết trên trang vẫn trỏ hungkings.com vì lila sinh URL tuyệt đối từ LILA_URL. Muốn cắt hẳn domain cũ thì xoá dòng vssa rồi deploy lại. TUYỆT ĐỐI KHÔNG khai docs.hungkings.com — đó là app KHÁC (hungkings-docsite) đang chạy, khai ở đây là cướp route của nó.",
   "routes": [
     { "host": "hungkings.com", "service": "web", "port": 8080 },
-    { "host": "www.hungkings.com", "service": "web", "port": 8080 },
-    { "subdomain": "hungkings-chess", "service": "web", "port": 8080 }
+    { "host": "www.hungkings.com", "service": "web", "port": 8080 }
   ],
   "needs_supabase": false
 }

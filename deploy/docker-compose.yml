@@ -19,8 +19,8 @@ services:
       # hreflang, og:image, link trong thư — nên đổi ở đây là đủ, KHÔNG cần dựng lại image.
       # Đổi giá trị thì phải deploy lại để compose recreate container (đổi env mà chỉ
       # restart thì tiến trình vẫn giữ env cũ).
-      # LƯU Ý: chỉ khai MỘT domain ở đây, đó là domain chuẩn. hungkings-chess.vssa.com vẫn
-      # được Caddy nhận (xem deploy.json) nhưng mọi link trên trang sẽ trỏ về hungkings.com.
+      # LƯU Ý: chỉ khai MỘT domain ở đây, đó là domain chuẩn. Route vssa cũ đã bỏ 05/08
+      # (xem deploy.json) — mọi thứ nay hoàn toàn trên hungkings.com.
       - LILA_DOMAIN=hungkings.com
       - LILA_URL=https://hungkings.com
       # supervisord re-runs reset-db.sh on every start, so this controls the
@@ -62,7 +62,7 @@ services:
       - MAILER_TLS=${MAILER_TLS:-true}
       - MAILER_USER=${MAILER_USER:-unused}
       - MAILER_PASSWORD=${MAILER_PASSWORD:-unused}
-      - MAILER_SENDER=${MAILER_SENDER:-HungKings <noreply@hungkings-chess.vssa.com>}
+      - MAILER_SENDER=${MAILER_SENDER:-HungKings <noreply@hungkings.com>}
     expose:
       - 8080
     networks:
