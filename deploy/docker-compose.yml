@@ -41,6 +41,8 @@ services:
       - LILA_HOME_SIDEBAR=${LILA_HOME_SIDEBAR:-false}
       # Diễn đàn tạm tắt. Mặc định `true` = giữ hành vi upstream nếu .env không khai.
       - LILA_FORUM=${LILA_FORUM:-true}
+      # Broadcast/tiếp sóng tạm tắt. Mặc định `true` = giữ hành vi upstream nếu .env không khai.
+      - LILA_BROADCAST=${LILA_BROADCAST:-true}
       # Khám phá khai cuộc + tablebase: image gộp KHÔNG có service ở 9002/9000, nên mặc
       # định của bản demo là TẮT (ngược với base.conf, vốn mặc định bật cho máy dev).
       # Có service thật rồi thì đặt LILA_EXPLORER=true + 2 endpoint trong deploy/.env.

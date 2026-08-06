@@ -63,6 +63,8 @@ services:
       # Diễn đàn tạm tắt. Mặc định `true` = giữ hành vi upstream. KHÔNG để rỗng:
       # HOCON coi biến rỗng là "đã đặt" nên parse bool sẽ nổ lúc khởi động.
       - LILA_FORUM=${LILA_FORUM:-true}
+      # Broadcast/tiếp sóng tạm tắt. Mặc định `true` = giữ hành vi upstream.
+      - LILA_BROADCAST=${LILA_BROADCAST:-true}
     volumes:
       - ./repos/lila:/lila
       - ./repos/chessground:/chessground
