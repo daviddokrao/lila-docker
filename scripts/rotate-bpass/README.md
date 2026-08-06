@@ -26,16 +26,16 @@ làm thẳng trong đó là chắc nhất: dùng đúng bản Java mà lila dùn
 CTS (ciphertext stealing) bằng ngôn ngữ khác rồi sai lệch âm thầm.
 
 ```sh
-docker cp Rotate.java 9kings-web:/tmp/ && docker exec 9kings-web sh -lc 'cd /tmp && javac Rotate.java'
+docker cp Rotate.java hungkings-web:/tmp/ && docker exec hungkings-web sh -lc 'cd /tmp && javac Rotate.java'
 
 # 1. SAO LƯU TRƯỚC — đây là đường lùi duy nhất
-docker exec 9kings-web mongosh --quiet lichess dump.js > before.tsv
+docker exec hungkings-web mongosh --quiet lichess dump.js > before.tsv
 
 # 2. Sinh bản đã xoay (chưa ghi gì vào DB)
-docker exec 9kings-web sh -lc 'cd /tmp && java Rotate "$KHOA_CU" "$KHOA_MOI" < before.tsv > after.tsv'
+docker exec hungkings-web sh -lc 'cd /tmp && java Rotate "$KHOA_CU" "$KHOA_MOI" < before.tsv > after.tsv'
 
 # 3. Kiểm ĐẢO NGƯỢC: xoay ngược bản mới phải ra đúng bản gốc từng byte
-docker exec 9kings-web sh -lc 'cd /tmp && java Rotate "$KHOA_MOI" "$KHOA_CU" < after.tsv | diff - before.tsv'
+docker exec hungkings-web sh -lc 'cd /tmp && java Rotate "$KHOA_MOI" "$KHOA_CU" < after.tsv | diff - before.tsv'
 
 # 4. Ghi vào MongoDB bằng bulkWrite (BinData(0, "<base64>")), rồi dump lại và diff với after.tsv
 ```

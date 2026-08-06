@@ -5,9 +5,9 @@ services:
   web:
     image: ghcr.io/daviddokrao/lila-docker:lila-master
     # Tên container phải là <name>-web với name của deploy.json: Caddy trỏ thẳng vào
-    # 9kings-web:8080. Đây là tên hạ tầng, không phải tên thương hiệu — thương hiệu
-    # hiển thị là LILA_SITE_NAME ngay dưới.
-    container_name: 9kings-web
+    # hungkings-web:8080. Đây là tên hạ tầng, không phải tên thương hiệu — thương hiệu
+    # hiển thị là LILA_SITE_NAME ngay dưới. (Đổi 9kings-web→hungkings-web 2026-08-06.)
+    container_name: hungkings-web
     restart: unless-stopped
     environment:
       - LILA_SITE_NAME=HungKings

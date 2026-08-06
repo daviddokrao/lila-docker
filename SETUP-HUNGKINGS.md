@@ -5,12 +5,12 @@ làm nền cho HungKings. Chưa sửa gì về sản phẩm — mọi thay đổ
 
 ## Repo layout
 
-> Thư mục trên đĩa vẫn tên `9Kings` và **các đường dẫn dưới đây là đường dẫn THẬT** — đừng
-> "sửa cho khớp thương hiệu", sửa là tài liệu sai. Cùng lý do với tên hạ tầng `9kings` trong
-> `deploy/deploy.json`: đó là định danh nội bộ, không phải tên thương hiệu.
+> Thư mục trên đĩa nay tên `HungKings` (đổi từ `9Kings` ngày 2026-08-06, cùng đợt đổi tên
+> hạ tầng `9kings`→`hungkings` trong `deploy/deploy.json` — đã migrate volume MongoDB an
+> toàn, xem HANDOFF). Các đường dẫn dưới đây là đường dẫn THẬT.
 
 ```
-C:\PROJECTS\9Kings\lila-docker\      # orchestration (fork daviddokrao/lila-docker)
+C:\PROJECTS\HungKings\lila-docker\      # orchestration (fork daviddokrao/lila-docker)
   repos\lila\                        # server chính, Scala 3 (fork daviddokrao/lila)
   repos\lila-ws\                     # websocket server (fork daviddokrao/lila-ws)
   repos\lila-db-seed\                # dữ liệu mẫu (fork daviddokrao/lila-db-seed)
@@ -65,7 +65,7 @@ text chứa đường dẫn đích, làm vỡ UI build (`ui/.build/src/algo.ts`,
 `core.symlinks=true` cho repo lila và khôi phục bằng git chạy trong container Linux:
 
 ```bash
-docker run --rm --entrypoint sh -v "C:\PROJECTS\9Kings\lila-docker\repos\lila:/repo" -w /repo alpine/git \
+docker run --rm --entrypoint sh -v "C:\PROJECTS\HungKings\lila-docker\repos\lila:/repo" -w /repo alpine/git \
   -c "git config --global --add safe.directory /repo; git checkout -f -- ."
 ```
 
