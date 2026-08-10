@@ -6,6 +6,25 @@ handle_errors 502 {
 	file_server
 }
 
+# HungKings — asset ĐÃ BĂM HASH phải cache dài. Image mono cố ý chạy Play ở Dev-mode
+# (xem memory image-chay-play-dev-mode), mà ở Dev-mode Play phục vụ /assets qua
+# `controllers.ExternalAssets` và nó gắn cứng `Cache-Control: max-age=3600`. Hệ quả đo
+# được bằng Lighthouse: mỗi lượt quay lại sau 1 giờ tải lại ~256 KiB font + JS + CSS
+# vốn KHÔNG BAO GIỜ đổi nội dung. Sửa ở tầng Caddy trong chính image này là chỗ rẻ nhất
+# (0 dòng Scala, không đụng hành vi Play).
+#
+# CHỈ khai những tiền tố mà tên tệp CÓ hash/phiên bản — đặt `immutable` nhầm lên một
+# đường không băm hash là khoá người dùng vào bản cũ suốt một năm:
+#   /assets/hashed/*    -> vd lichess.2a2cb52f.woff2
+#   /assets/compiled/*  -> vd site.APZAY2M6.js, i18n/site.vi-VN.ca24f1d1228d.js
+#   /assets/css/*       -> vd site.e85b3ded.css
+#   /assets/_<ver>/*    -> tiền tố phiên bản asset, đổi mỗi lần build
+# CỐ Ý bỏ ngoài: /assets/logo/*, /assets/apple-touch-icon.png, manifest.json… (tên cố định).
+@immutableAssets {
+	path /assets/hashed/* /assets/compiled/* /assets/css/* /assets/_*
+}
+header @immutableAssets Cache-Control "public, max-age=31536000, immutable"
+
 @websockets {
 	header Connection *Upgrade*
 	header Upgrade websocket
