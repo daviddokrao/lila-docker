@@ -1,0 +1,22 @@
+# www.hungkings.com → chuyển hướng 301 về apex.
+#
+# Đây là BẢN SAO để lưu trong kho; bản CHẠY THẬT nằm ở
+#   /opt/platform/caddy/sites/hungkings-www.caddy  (trên VPS 95.217.60.140)
+# Đặt thành file RIÊNG chứ không nhét vào hungkings.caddy: hungkings.caddy do
+# deploy.sh SINH LẠI từ deploy.json mỗi lần deploy, sửa tay vào đó là mất.
+#
+# Vì sao cần: từ 05/08 site cho Google index (robots.txt Allow). Trước 10/08 cả
+# apex lẫn www đều reverse_proxy tới hungkings-web nên hai hostname phục vụ nội
+# dung y hệt — Google thấy nội dung trùng lặp và có thể chọn nhầm hostname
+# chuẩn. lila cũng chỉ tự nhận `net.domain` = apex.
+#
+# ĐIỀU KIỆN SỐNG: www.hungkings.com đã có bản ghi DNS trỏ về VPS này (Caddy tự
+# xin Let's Encrypt). Nếu gỡ bản ghi DNS thì xoá luôn khối này, để lại sẽ khiến
+# Caddy xin cert thất bại lặp lại.
+#
+# ĐỪNG khai lại www.hungkings.com trong deploy/deploy.json: hai khối cùng một
+# địa chỉ site làm `caddy reload` HỎNG, và Caddy là của CẢ platform (mọi dự án
+# khác trên VPS cũng chết theo).
+www.hungkings.com {
+    redir https://hungkings.com{uri} permanent
+}
