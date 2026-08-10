@@ -23,7 +23,10 @@ handle_errors 502 {
 @immutableAssets {
 	path /assets/hashed/* /assets/compiled/* /assets/css/* /assets/_*
 }
-header @immutableAssets Cache-Control "public, max-age=31536000, immutable"
+# Dau ">" = "deferred set": ghi DE header cua upstream luc ghi response. Khong co no
+# thi Caddy CONG THEM mot dong Cache-Control nua, va response ra ngoai mang CA HAI
+# ("public, max-age=31536000, immutable" VA "max-age=3600") — da do that tren live.
+header @immutableAssets >Cache-Control "public, max-age=31536000, immutable"
 
 @websockets {
 	header Connection *Upgrade*
