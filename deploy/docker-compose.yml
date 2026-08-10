@@ -46,6 +46,9 @@ services:
       # Trang bảo trợ + bảng so sánh gói. Mặc định `true` = giữ hành vi upstream nếu .env
       # không khai; demo đặt LILA_PATRON=false vì Donate đã gỡ (trang là ngõ cụt).
       - LILA_PATRON=${LILA_PATRON:-true}
+      # Thư viện video của Lichess. Mặc định `true` = giữ hành vi upstream nếu .env không
+      # khai; demo đặt LILA_VIDEO=false.
+      - LILA_VIDEO=${LILA_VIDEO:-true}
       # Khám phá khai cuộc + tablebase: image gộp KHÔNG có service ở 9002/9000, nên mặc
       # định của bản demo là TẮT (ngược với base.conf, vốn mặc định bật cho máy dev).
       # Có service thật rồi thì đặt LILA_EXPLORER=true + 2 endpoint trong deploy/.env.
