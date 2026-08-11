@@ -49,6 +49,19 @@ services:
       # Thư viện video của Lichess. Mặc định `true` = giữ hành vi upstream nếu .env không
       # khai; demo đặt LILA_VIDEO=false.
       - LILA_VIDEO=${LILA_VIDEO:-true}
+      # Hệ điểm tích luỹ + đổi quà + giới thiệu 33%. Mặc định `false` — NGƯỢC với các cờ
+      # trên: chúng gác tính năng có sẵn của upstream nên mặc định bật là "không đổi hành
+      # vi", còn cờ này gác tính năng MỚI cần service ngoài `hungkings-points`.
+      #
+      # ⚠️ Khai ở ĐÂY là bắt buộc, không phải chỉ đặt trong deploy/.env: compose CHỈ truyền
+      # vào container những biến được khai tường minh trong khối `environment`. Đã trả giá
+      # đúng chỗ này — .env có LILA_POINTS=true, container không hề thấy, 6 route đều 404
+      # trong khi /source in đúng commit mới.
+      - LILA_POINTS=${LILA_POINTS:-false}
+      # Khoá ký danh tính, PHẢI trùng POINTS_HMAC_SECRET của service điểm. Rỗng = lila
+      # không gửi header danh tính = service coi mọi người là khách chưa đăng nhập.
+      - LILA_POINTS_HMAC_SECRET=${LILA_POINTS_HMAC_SECRET:-}
+      - LILA_POINTS_INTERNAL_URL=${LILA_POINTS_INTERNAL_URL:-http://hungkings-points-web:8091}
       # Khám phá khai cuộc + tablebase: image gộp KHÔNG có service ở 9002/9000, nên mặc
       # định của bản demo là TẮT (ngược với base.conf, vốn mặc định bật cho máy dev).
       # Có service thật rồi thì đặt LILA_EXPLORER=true + 2 endpoint trong deploy/.env.
