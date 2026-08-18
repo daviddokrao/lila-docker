@@ -33,11 +33,41 @@ header @immutableAssets >Cache-Control "public, max-age=31536000, immutable"
 	header Upgrade websocket
 }
 
-reverse_proxy @websockets :9664 {
-	header_up Origin {$LILA_URL}
+# GIẢI CỜ 2 PHÁI (arena) same-origin tại hungkings.com/giai-app/* — 18/08.
+#
+# VÌ SAO KHÔNG đi qua Main.streamProxy như /hlv-app, /diem-app, /realchess: arena sống bằng
+# WebSocket (thế cờ, đồng hồ vòng, chat). Hai rào chặn, cả hai đều chí mạng:
+#   1. streamProxy dùng Play WS client `.stream()` — đó là HTTP, không nâng cấp được
+#      `Connection: Upgrade`.
+#   2. Kể cả vá được Play thì matcher @websockets NGAY TRÊN vẫn bắt MỌI request mang
+#      `Upgrade: websocket` và ném sang lila-ws :9664 TRƯỚC khi tới Play — arena sẽ bắt tay
+#      nhầm với lila-ws rồi chết câm.
+# Nên arena phải được chặn ngay tại tầng Caddy này, ĐẶT TRƯỚC khối bắt-tất-cả bên dưới.
+#
+# BẮT BUỘC dùng `handle`, KHÔNG được để `reverse_proxy` trần như trước: `handle` chỉ loại
+# trừ lẫn nhau GIỮA CÁC `handle`. Một directive `reverse_proxy` trần nằm ngoài mọi handle vẫn
+# tiếp tục khớp request đã được handle ở trên — nên khối bắt-tất-cả cũ buộc phải bọc vào
+# `handle` thì việc loại trừ mới thật sự xảy ra.
+#
+# `handle_path` (khác `handle`) CẮT BỎ tiền tố trước khi chuyển đi, nên arena vẫn thấy đường
+# `/`, `/app.js`, `/api/toi`, `/ws` y như lúc chạy ở gốc; nó chỉ cần `X-Base-Path` để biết
+# phải PHÁT RA URL có tiền tố (đúng quy ước coach/points đang dùng).
+#
+# Đích đọc từ env để đổi được mà không dựng lại image (Caddyfile bake trong image).
+redir /giai-app /giai-app/
+handle_path /giai-app/* {
+	reverse_proxy {$LILA_ARENA_UPSTREAM:hungkings-arena-web:8092} {
+		header_up X-Base-Path /giai-app
+	}
 }
 
-reverse_proxy :9663 {
-	header_up Host {$LILA_DOMAIN}
-	header_up Origin {$LILA_URL}
+handle {
+	reverse_proxy @websockets :9664 {
+		header_up Origin {$LILA_URL}
+	}
+
+	reverse_proxy :9663 {
+		header_up Host {$LILA_DOMAIN}
+		header_up Origin {$LILA_URL}
+	}
 }
