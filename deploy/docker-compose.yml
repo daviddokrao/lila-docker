@@ -106,6 +106,10 @@ services:
       # BIẾN RỖNG là "đã đặt" rồi parse bool sẽ NỔ lúc khởi động — nên phải có giá trị
       # dùng được, không được để trống.
       - LILA_COACH_DIRECTORY=${LILA_COACH_DIRECTORY:-false}
+      # Onboarding /bat-dau: sau khi ĐĂNG KÝ thì hạ cánh ở trang 3 lựa chọn thay vì thả
+      # thẳng về /#hv2-play. Gác 2 lớp (route 404 + redirectNewUser về đường cũ) nên tắt cờ
+      # là 0 byte đổi hành vi. Đọc bằng `contains("true")` → biến rỗng = TẮT.
+      - LILA_ONBOARDING_CHOICE=${LILA_ONBOARDING_CHOICE:-false}
       # Khám phá khai cuộc + tablebase: image gộp KHÔNG có service ở 9002/9000, nên mặc
       # định của bản demo là TẮT (ngược với base.conf, vốn mặc định bật cho máy dev).
       # Có service thật rồi thì đặt LILA_EXPLORER=true + 2 endpoint trong deploy/.env.
