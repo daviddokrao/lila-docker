@@ -81,6 +81,11 @@ services:
       # không đi qua Main.streamProxy được. Đổi đích không cần dựng lại image; còn đổi chính
       # đường /giai-app thì phải build vì Caddyfile bake trong image.
       - LILA_ARENA_UPSTREAM=${LILA_ARENA_UPSTREAM:-hungkings-arena-web:8092}
+      # Cờ hiện LỐI VÀO của Giải 2 Phái: trang vỏ /giai + mục con trong sidebar.
+      # CỐ Ý tách khỏi LILA_ARENA_UPSTREAM ở trên: tắt cờ này chỉ ẩn lối vào, còn
+      # /giai-app/* vẫn sống (Caddy nội bộ không biết gì về env của Play) — người đang
+      # chơi dở một vòng không bị ngắt kết nối giữa chừng. Mặc định false = 404.
+      - LILA_ARENA=${LILA_ARENA:-false}
       # Khám phá khai cuộc + tablebase: image gộp KHÔNG có service ở 9002/9000, nên mặc
       # định của bản demo là TẮT (ngược với base.conf, vốn mặc định bật cho máy dev).
       # Có service thật rồi thì đặt LILA_EXPLORER=true + 2 endpoint trong deploy/.env.
