@@ -98,6 +98,14 @@ services:
       # dựng cả màn hình quanh thứ tương đương và THU TIỀN, ta cho không mà để ngang hàng.
       # Đọc bằng `sys.env...contains("true")` nên biến rỗng = TẮT.
       - LILA_ROUND_REVIEW_CTA=${LILA_ROUND_REVIEW_CTA:-false}
+      # Danh bạ HUẤN LUYỆN VIÊN NGƯỜI THẬT ở /coach. Còn 0 người sau khi gỡ 12 hồ sơ giả,
+      # và không có lối vào nào từ điều hướng — trang rỗng thì ẩn. Mặc định TẮT = 404.
+      # ĐỪNG nhầm với LILA_COACH_INTERNAL_URL: cái đó là đích proxy của HLV **AI** ở /hlv,
+      # hai tính năng khác hẳn nhau. Cố ý đặt tên khác nhau để không ai bật nhầm.
+      # ⚠️ Biến này đi qua HOCON (`${?LILA_COACH_DIRECTORY}` trong mono.conf), mà HOCON coi
+      # BIẾN RỖNG là "đã đặt" rồi parse bool sẽ NỔ lúc khởi động — nên phải có giá trị
+      # dùng được, không được để trống.
+      - LILA_COACH_DIRECTORY=${LILA_COACH_DIRECTORY:-false}
       # Khám phá khai cuộc + tablebase: image gộp KHÔNG có service ở 9002/9000, nên mặc
       # định của bản demo là TẮT (ngược với base.conf, vốn mặc định bật cho máy dev).
       # Có service thật rồi thì đặt LILA_EXPLORER=true + 2 endpoint trong deploy/.env.
