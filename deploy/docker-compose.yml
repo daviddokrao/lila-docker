@@ -127,6 +127,11 @@ services:
       # vừa khiến cache ấm gần như tức thì (đo: ấm 9–13ms, lạnh 6,7–8,0s → khối tự thu lại).
       # Hạn mức IP dùng lại COACH_SUMMARY_LIMIT_IP sẵn có, không chế bộ đếm mới.
       - LILA_HOME_COACH_DEMO=${LILA_HOME_COACH_DEMO:-false}
+      # 6 trang hub cấp 1 (/choi /cau-do /hoc /giai-dau /cong-dong /cong-cu). Trước đó mục
+      # cấp 1 của sidebar trỏ vào NEO (/#hv2-play) — không chia sẻ được, không index được,
+      # và không có trang nào nói "ở đây làm được gì".
+      # Tắt cờ = 6 route 404 VÀ sidebar giữ nguyên đích cũ → 0 byte đổi hành vi.
+      - LILA_HUBS=${LILA_HUBS:-false}
       # Khám phá khai cuộc + tablebase: image gộp KHÔNG có service ở 9002/9000, nên mặc
       # định của bản demo là TẮT (ngược với base.conf, vốn mặc định bật cho máy dev).
       # Có service thật rồi thì đặt LILA_EXPLORER=true + 2 endpoint trong deploy/.env.
