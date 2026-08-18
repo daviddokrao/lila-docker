@@ -93,6 +93,11 @@ services:
       # Đọc bằng `sys.env...contains("true")` chứ không qua HOCON, nên biến rỗng = TẮT
       # (HOCON thì coi biến rỗng là "đã đặt" và parse bool sẽ nổ lúc khởi động).
       - LILA_LOBBY_ESCAPE_HATCH=${LILA_LOBBY_ESCAPE_HATCH:-false}
+      # Màn sau ván: gộp thành MỘT nút cấp-chính "Xem AI giải cả ván" + nhận xét AI, ba nút
+      # còn lại xuống hàng phụ. Không thêm tính năng, chỉ đổi thứ bậc thị giác — chess.com
+      # dựng cả màn hình quanh thứ tương đương và THU TIỀN, ta cho không mà để ngang hàng.
+      # Đọc bằng `sys.env...contains("true")` nên biến rỗng = TẮT.
+      - LILA_ROUND_REVIEW_CTA=${LILA_ROUND_REVIEW_CTA:-false}
       # Khám phá khai cuộc + tablebase: image gộp KHÔNG có service ở 9002/9000, nên mặc
       # định của bản demo là TẮT (ngược với base.conf, vốn mặc định bật cho máy dev).
       # Có service thật rồi thì đặt LILA_EXPLORER=true + 2 endpoint trong deploy/.env.
