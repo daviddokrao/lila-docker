@@ -117,6 +117,16 @@ services:
       # Mã chỉ lấy từ /diem-app/api/me (lila tự ký HMAC theo phiên), trang không bao giờ nhận
       # mã từ đầu vào người dùng. Bấm link CHỈ đặt cookie, không ghi DB.
       - LILA_INVITE_LINK=${LILA_INVITE_LINK:-false}
+      # Demo HLV AI tương tác trên trang chủ: đi một nước → AI nhận xét tiếng Việt tại chỗ.
+      # Đây là cách duy nhất để khách hiểu "khác gì lichess" trong 10 giây; trước đó trang chủ
+      # chỉ có một trích dẫn TĨNH.
+      # RÀNG BUỘC QUAN TRỌNG NHẤT — coach hỏng thì khối TỰ GỠ khỏi DOM, trang chủ không vỡ:
+      # vỏ ra đời ở display:none, chỉ hiện sau khi hỏi được /hlv-app/healthz. Đã thử tắt coach
+      # thật: healthz 502 → khối remove(), chiều cao trang về 64px, không hộp lỗi, không nháy.
+      # Bề mặt đầu vào khoá vào ĐÚNG 20 nước đi đầu của Trắng: vừa chặn FEN lạ vào prompt,
+      # vừa khiến cache ấm gần như tức thì (đo: ấm 9–13ms, lạnh 6,7–8,0s → khối tự thu lại).
+      # Hạn mức IP dùng lại COACH_SUMMARY_LIMIT_IP sẵn có, không chế bộ đếm mới.
+      - LILA_HOME_COACH_DEMO=${LILA_HOME_COACH_DEMO:-false}
       # Khám phá khai cuộc + tablebase: image gộp KHÔNG có service ở 9002/9000, nên mặc
       # định của bản demo là TẮT (ngược với base.conf, vốn mặc định bật cho máy dev).
       # Có service thật rồi thì đặt LILA_EXPLORER=true + 2 endpoint trong deploy/.env.
