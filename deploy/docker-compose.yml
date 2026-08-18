@@ -62,6 +62,25 @@ services:
       # không gửi header danh tính = service coi mọi người là khách chưa đăng nhập.
       - LILA_POINTS_HMAC_SECRET=${LILA_POINTS_HMAC_SECRET:-}
       - LILA_POINTS_INTERNAL_URL=${LILA_POINTS_INTERNAL_URL:-http://hungkings-points-web:8091}
+      # Real Chess (bàn cờ 3D vật lý) same-origin hungkings.com/realchess — David chốt 13/08.
+      # RỖNG = TẮT (404). Biến này KHÔNG qua HOCON (Main.scala đọc sys.env thẳng) nên mặc
+      # định rỗng an toàn. Bật: đặt trong deploy/.env trên VPS
+      #   LILA_REALCHESS_INTERNAL_URL=http://hungkings-realchess-web:8091
+      # (container realchess phải deploy TRƯỚC, cùng network edge). Rollback = xoá dòng
+      # .env + deploy lại — không build lại image.
+      - LILA_REALCHESS_INTERNAL_URL=${LILA_REALCHESS_INTERNAL_URL:-}
+      # HLV AI (coach). `Main.scala` đọc biến này qua sys.env với mặc định cứng
+      # http://hungkings-coach-web:8090, và tài liệu dự án vẫn ghi "đổi đích coach qua env
+      # LILA_COACH_INTERNAL_URL". Nhưng biến CHƯA BAO GIỜ được khai ở đây, mà compose chỉ
+      # truyền vào container những biến khai tường minh — nên cửa thoát hiểm đó thực tế
+      # chưa từng dùng được: đo bằng `docker exec hungkings-web env | grep -i coach` ngày
+      # 18/08 cho ra RỖNG. Khai lại cho đúng lời hứa; giá trị mặc định giữ nguyên hành vi cũ.
+      - LILA_COACH_INTERNAL_URL=${LILA_COACH_INTERNAL_URL:-http://hungkings-coach-web:8090}
+      # Giải cờ 2 phái (arena) same-origin hungkings.com/giai-app/*. Đích này do CADDY NỘI BỘ
+      # trong image dùng (conf/mono.Caddyfile), KHÔNG phải Play — arena chạy WebSocket nên
+      # không đi qua Main.streamProxy được. Đổi đích không cần dựng lại image; còn đổi chính
+      # đường /giai-app thì phải build vì Caddyfile bake trong image.
+      - LILA_ARENA_UPSTREAM=${LILA_ARENA_UPSTREAM:-hungkings-arena-web:8092}
       # Khám phá khai cuộc + tablebase: image gộp KHÔNG có service ở 9002/9000, nên mặc
       # định của bản demo là TẮT (ngược với base.conf, vốn mặc định bật cho máy dev).
       # Có service thật rồi thì đặt LILA_EXPLORER=true + 2 endpoint trong deploy/.env.

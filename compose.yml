@@ -65,6 +65,10 @@ services:
       - LILA_FORUM=${LILA_FORUM:-true}
       # Broadcast/tiếp sóng tạm tắt. Mặc định `true` = giữ hành vi upstream.
       - LILA_BROADCAST=${LILA_BROADCAST:-true}
+      # Real Chess (bàn 3D) same-origin /realchess. RỖNG = TẮT (404) — biến này KHÔNG
+      # qua HOCON (Main.scala đọc sys.env thẳng) nên rỗng an toàn, khác các cờ trên.
+      # Dev local: đặt http://host.docker.internal:8091 trong .env (node server.js trên host).
+      - LILA_REALCHESS_INTERNAL_URL=${LILA_REALCHESS_INTERNAL_URL:-}
     volumes:
       - ./repos/lila:/lila
       - ./repos/chessground:/chessground
