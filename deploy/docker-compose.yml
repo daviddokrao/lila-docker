@@ -170,6 +170,11 @@ services:
       # Kho dữ liệu MongoDB. Không có dòng này thì mọi tài khoản người thật
       # đăng ký sẽ biến mất ở lần deploy kế tiếp, vì /seeded nằm trong image.
       - mongodb:/seeded
+      # K7 (20/08): chuỗi riêng của HungKings theo ngôn ngữ. Để NGOÀI image có chủ đích —
+      # thêm một ngôn ngữ = thả `<lang>.json` vào thư mục này rồi deploy lại, KHÔNG build lại
+      # image (13-20 phút). Thiếu thư mục cũng không sao: HkI18n rơi về hành vi cũ.
+      # `:ro` vì app chỉ đọc; đường trong container khớp mặc định của LILA_HK_I18N_DIR.
+      - ./hk-i18n:/hk-i18n:ro
 
 networks:
   edge:
