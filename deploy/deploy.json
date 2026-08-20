@@ -1,9 +1,12 @@
 {
   "_comment": "name là tên HẠ TẦNG, người dùng không bao giờ thấy nó. Nó quyết định ba thứ cùng lúc: thư mục /opt/apps/<name> mà deploy-remote.sh 'rm -rf' trước khi giải nén, tên project compose (tiền tố volume <name>_mongodb), và hostname Caddy trỏ tới (<name>-web:8080, phải khớp container_name). ĐỔI TÊN 9kings→hungkings ngày 2026-08-06 (David chốt dời cả tên hạ tầng sang chuẩn HungKings): đã migrate volume 9kings_mongodb→hungkings_mongodb (copy dữ liệu + đổi seed marker) TRƯỚC khi deploy nên KHÔNG mất tài khoản. Muốn đổi name lần nữa: BẮT BUỘC migrate volume trước, đổi thẳng = compose tạo volume RỖNG = mất sạch tài khoản. Tên thương hiệu hiển thị nằm ở LILA_SITE_NAME, domain nằm ở LILA_DOMAIN/LILA_URL trong docker-compose.yml.",
   "_routes_comment": "Domain chuẩn (canonical) là APEX hungkings.com. Bộ sinh Caddy của platform CHỈ biết reverse_proxy, KHÔNG có redirect — nên www CỐ Ý không khai ở đây: trước 2026-08-10 nó là route proxy thứ hai, tức hai hostname cùng phục vụ nội dung y hệt với robots.txt Allow = nội dung trùng lặp trước Google. Nay www nằm ở FILE VIẾT TAY /opt/platform/caddy/sites/hungkings-www.caddy trên VPS (redir 301 về apex), bản sao ở deploy/caddy-www.caddy cạnh file này. Khai lại www vào routes = Caddy có 2 khối cùng địa chỉ = reload HỎNG CẢ PLATFORM. TUYỆT ĐỐI KHÔNG khai docs.hungkings.com — đó là app KHÁC (hungkings-docsite) đang chạy, khai ở đây là cướp route của nó.",
+  "_access_log_comment": "Bật 2026-08-20 cho task L8a: cần phân bố Accept-Language THẬT để chọn ngôn ngữ đợt 2 (P2.4) — trước đó VPS không có access log nào nên mô tả P2.4 cũ ('đo từ log Caddy') là giả định sai. Bộ sinh của platform lọc sẵn ngay tại chỗ ghi: KHÔNG giữ IP thô, Cookie, Authorization, User-Agent, Referer. Ghi vào /data/logs/ vì /data đã được mount sẵn vào container caddy → không phải sửa compose, không phải restart Caddy. Đọc số: xem PROGRESS.md mục L8b (cần ≥3 ngày tích luỹ).",
   "name": "hungkings",
   "routes": [
-    { "host": "hungkings.com", "service": "web", "port": 8080 }
+    { "host": "hungkings.com", "service": "web", "port": 8080,
+      "access_log": { "file": "/data/logs/hk.log",
+                      "roll_size_mb": 10, "roll_keep": 20, "roll_keep_days": 21 } }
   ],
   "needs_supabase": false
 }
