@@ -119,7 +119,12 @@ jobs:
             type=raw,value=latest,enable=${{ steps.build_vars.outputs.is_lila_main }}
       
       - name: Free disk space on Ubuntu runner
-        uses: kfir4444/free-disk-space@main
+        # B28 (audit 22/08): trước dùng kfir4444/free-disk-space@main — tài khoản cá nhân
+        # bỏ hoang, ghim NHÁNH DI ĐỘNG, chạy sau khi runner đã đăng nhập ghcr (có quyền
+        # đẩy image). Nay dùng action GỐC được bảo trì + GHIM SHA BẤT BIẾN: một commit độc
+        # hại về sau KHÔNG chèn vào build được (SHA cố định), và không còn phụ thuộc repo
+        # cá nhân bỏ hoang. Nâng SHA thì đọc release note của jlumbroso/free-disk-space.
+        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
         with:
           tool-cache: true
 

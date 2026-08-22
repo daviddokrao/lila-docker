@@ -95,8 +95,12 @@ COPY --from=lilawsbuilder /lila-ws/target /lila-ws/target
 COPY --from=lilafishnetbuilder /lila-fishnet/app/target /lila-fishnet/app/target
 # The upstream fishnet binary is built against musl and ships its own Stockfish, so it
 # needs nothing here but its loader. Copying that is far smaller than a second runtime.
+# Glob `ld-musl-*.so.1` thay vì hardcode `-x86_64`: tên loader khác theo kiến trúc
+# (x86_64 vs aarch64), hardcode làm build multi-arch VỠ ở nhánh arm64 (audit 22/08 —
+# đúng lỗi khiến build đa-kiến-trúc lâu nay hỏng). Mỗi nhánh build chỉ có đúng một
+# file khớp glob (loader của chính kiến trúc đó).
 COPY --from=niklasf/fishnet:2.12.0 /fishnet /usr/local/bin/fishnet
-COPY --from=niklasf/fishnet:2.12.0 /lib/ld-musl-x86_64.so.1 /lib/ld-musl-x86_64.so.1
+COPY --from=niklasf/fishnet:2.12.0 /lib/ld-musl-*.so.1 /lib/
 COPY --from=lilabuilder /lila/bin/mongodb/indexes.js /lila/bin/mongodb/indexes.js
 COPY --from=lilabuilder /lila/target /lila/target
 COPY --from=lilabuilder /lila/public /lila/public
